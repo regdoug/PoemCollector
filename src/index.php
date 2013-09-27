@@ -17,9 +17,10 @@
 	* Get a connection to the database.
 	* @return The connection to the database.
 	**/
+	require_once('SiteConfigVars.php');
 	function getDatabase()
 	{
-		return new PDO('mysql:host=localhost;dbname=rit;charset=utf8', 'rit', '8Vyq787JKujUwDQH');
+		return new PDO('mysql:host='.getConfigValue('dbHost_w_hon').';dbname=w_hon;charset=utf8', 'w-hon', getConfigValue('dbPass_w_hon'));
 	}
 ?>
 <!DOCTYPE HTML>
@@ -236,3 +237,4 @@
 	</body>
 
 </html>
+
