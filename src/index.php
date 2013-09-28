@@ -4,6 +4,10 @@
 	**/
 	$release = 3; // Build number
 	
+	require_once('recaptchalib.php');
+	$recatpchaPublicKey = "6LewcucSAAAAAJOxCV4h_KDIqc019Zb77C2BEVPp";
+	$recatpchaPrivateKey = "6LewcucSAAAAAJ64W2-qJbBuFeN3bK_j3HL0BE3Y";
+	
 	// Do any pre-header stuff up here.
 	$action = "create";
 	if (isset($_REQUEST['action']))
@@ -59,9 +63,7 @@
 						<br />
 						
 						<?php
-							require_once('recaptchalib.php');
-					        $publickey = "6LewcucSAAAAAJOxCV4h_KDIqc019Zb77C2BEVPp"; // you got this from the signup page
-					        echo recaptcha_get_html($publickey);
+					        echo recaptcha_get_html($recatpchaPublicKey);
 						?>
 						
 						<input type="submit" />
@@ -86,9 +88,7 @@
 					}
 					
 					// Check that reCaptcha!
-					require_once('recaptchalib.php');
-			  		$privatekey = "6LewcucSAAAAAJ64W2-qJbBuFeN3bK_j3HL0BE3Y";
-			  		$resp = recaptcha_check_answer ($privatekey,
+			  		$resp = recaptcha_check_answer ($recatpchaPrivateKey,
 			                                $_SERVER["REMOTE_ADDR"],
 			                                $_POST["recaptcha_challenge_field"],
 			                                $_POST["recaptcha_response_field"]);
@@ -130,7 +130,74 @@
 						<a href="?">Back to form</a>
 					';
 				}
-				else if ($action == "view")
+				else if ($action == "vote")
+				{
+					// Make sure a poem ID is set
+					if (isset($_REQUEST['id']))
+					{
+						$id = $_REQUEST['id'];
+						// And valid... This is RIT, don't want people screwing with anything
+						if (filter_var($id, FILTER_VALIDATE_INT))
+						{
+							?>
+							Please fill out the reCaptcha before voting:<br />
+							<?php
+								echo '<form method="post" action="?action=confirmvote&id='.$id.'">';
+								echo recaptcha_get_html($recatpchaPublicKey);
+							?>
+							
+							<input type="submit" />
+							</form>
+							<a href="?action=view">Cancel</a>
+							<?php
+						}
+						
+					}
+					
+				}
+				else if ($action == "confirmvote")
+				{
+					// Make sure a poem ID is set
+					if (isset($_REQUEST['id']))
+					{
+						$id = $_REQUEST['id'];
+						// And again, valid.
+						if (filter_var($id, FILTER_VALIDATE_INT))
+						{
+							// Check that reCaptcha!
+					  		$resp = recaptcha_check_answer ($recatpchaPrivateKey,
+					                                $_SERVER["REMOTE_ADDR"],
+					                                $_POST["recaptcha_challenge_field"],
+					                                $_POST["recaptcha_response_field"]);
+					                                
+			                if (!$resp->is_valid)
+					  		{
+					  			echo 'Sorry, the reCaptcha was not solved correctly.<br />';
+					  			echo '<a href="?action=vote&id='.$id.'">Try again</a>';
+					  		}
+					  		else
+					  		{
+					  			// Grab the current amount of votes
+					  			$db = getDatabase();
+								$stmt = $db->prepare("SELECT * FROM rit_poems WHERE id=:id");
+								$stmt->execute(array(':id' => $id));
+								$row = $stmt->fetch(PDO::FETCH_ASSOC);
+								$votes = $row['votes'];
+								
+								// Increment it
+								$votes++;
+								
+								// And save it!
+								$stmt = $db->prepare("UPDATE rit_poems SET votes=:votes WHERE id=:id");
+								$stmt->execute(array(':id' => $id, ':votes' => $votes));
+								
+					  			echo 'Thank you for voting.<br />';
+					  			$action = "view";
+					  		}
+						}
+					}
+				}
+				if ($action == "view")
 				{
 					$db = getDatabase();
 					$stmt = $db->prepare("SELECT * FROM rit_poems");
@@ -142,7 +209,10 @@
 							<div class="poem">
 								<h2 class="poem">'.$row['title'].'</h2>
 								<h3 class="poem">by '.$row['author'].'</h3>
+								<hr />
 								<pre class="poem">'.nl2br($row['text']).'</pre>
+								<hr />
+								<span class="poem">Votes: '.$row['votes'].'<br /><a href="?action=vote&id='.$row['id'].'">Cast vote</a></span>
 							</div>
 						';
 					}
