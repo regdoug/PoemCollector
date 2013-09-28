@@ -1,0 +1,103 @@
+/* Styling for background */
+html
+{
+	height: 100%;
+}
+
+body
+{
+	background: url("images/background.png");
+	
+	height: 100%;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	
+
+}
+
+/* Styling for main body text */
+div.main
+{
+	text-align: center;
+}
+
+#recaptcha_area
+{
+    margin: 0 auto;
+}
+
+/* Styling for editor div */
+div.editor
+{
+	width: 600px;
+	margin: 0 auto;
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 3px;
+	border-color: rgb(150, 8, 10);
+	background-color: rgba(150, 10, 10, 0.8);
+	padding: 6px;
+	font-size: 20px;
+	color: #FFF;
+}
+
+/* Styling for the header */
+h1
+{
+	background-color: #DDD;
+    margin: 0 0 30px 0;
+    padding: 30px;
+    font-family: Arial;
+    background-color: rgba(255,230,230,0.4);
+    font-size: 3em;
+    text-shadow: #FFF 0px 0px 9px;
+}
+
+/* Styling for the poems */
+div.poem
+{
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 3px;
+	padding: 0px;
+	margin-bottom: 40px;
+}
+
+h2.poem
+{
+	margin: 10px;
+}
+
+h3.poem
+{
+	margin: 0 0 20px 0;
+    font-size: .8em;
+}
+
+pre.poem
+{
+	text-align: left;
+    margin: 10px;
+    text-overflow: clip;
+    font-family: arial;
+}
+
+/* Styling for the link colors */
+a:link
+{
+	color: #1FE5FF;
+}
+a:visited
+{
+	color: #1FE5FF;
+}
+a:hover
+{
+	color: #BFF8FF;
+}
+a:active
+{
+	color: #1FE5FF;
+}
+

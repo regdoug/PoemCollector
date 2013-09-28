@@ -2,6 +2,7 @@
 	/**
 	* @author Ryan Rule-Hoffman
 	**/
+	$release = 3; // Build number
 	
 	// Do any pre-header stuff up here.
 	$action = "create";
@@ -11,7 +12,7 @@
 	}
 	
 	// Set the title of the page.
-	$title = "RIT Honors Poems";
+	$title = "RIT Honors Pizza Poems";
 	
 	/**
 	* Get a connection to the database.
@@ -29,97 +30,12 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title><?php echo $title; ?></title>
-		<style>
-		
-			/* Styling for background */
-			html
-			{
-				height: 100%;
-			}
-			
-			body
-			{
-				/* fallback */
-				background-color: #1a82f7;
-				background: url(images/linear_bg_2.png);
-				background-repeat: repeat-x;
-				
-				/* Safari 4-5, Chrome 1-9 */
-				background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#40BFFF), to(#005FE3));
-				
-				/* Safari 5.1, Chrome 10+ */
-				background: -webkit-linear-gradient(top, #005FE3, #40BFFF);
-				
-				/* Firefox 3.6+ */
-				background: -moz-linear-gradient(top, #005FE3, #40BFFF);
-				
-				/* IE 10 */
-				background: -ms-linear-gradient(top, #005FE3, #40BFFF);
-				
-				/* Opera 11.10+ */
-				background: -o-linear-gradient(top, #005FE3, #40BFFF);
-				
-				height: 100%;
-				margin: 0;
-				background-repeat: no-repeat;
-				background-attachment: fixed;
-				
-
-			}
-		
-			/* Styling for main body text */
-			div.main
-			{
-				text-align: center;
-			}
-			
-			#recaptcha_area
-			{
-			    margin: 0 auto;
-			}
-			
-			/* Styling for editor div */
-			div.editor
-			{
-				width: 500px;
-				margin: 0 auto;
-				border-style: solid;
-				border-width: 3px;
-				border-radius: 3px;
-				border-color: #FF7A7A;
-				background-color: rgba(255, 33, 33, 0.4);
-				padding: 6px;
-				font-size: 20px;
-			}
-			
-			div.poem
-			{
-				border-style: solid;
-				border-width: 3px;
-				border-radius: 3px;
-				border-color: #40FF7C;
-				padding: 0px;
-			}
-			
-			/* Styling for the link colors */
-			a:link {
-				color: #1FE5FF;
-			}
-			a:visited {
-				color: #1FE5FF;
-			}
-			a:hover {
-				color: #BFF8FF;
-			}
-			a:active {
-				color: #1FE5FF;
-			}
-		</style>
+		<link rel="stylesheet" href="css/poems.css" />
 	</head>
 	
 	<body>
 		<div class="main">
-			<h1>Honors Poem Submission</h1>
+			<h1>Honors Pizza Poem Submission</h1>
 			<?php /* <a href="?action=view">View submissions</a><br /> */ ?>
 			<div class="editor">
 			<?php
@@ -224,9 +140,9 @@
 					{
 						echo '
 							<div class="poem">
-								<h2>'.$row['title'].'</h2>
-								by '.$row['author'].'<br />
-								'.$row['text'].'
+								<h2 class="poem">'.$row['title'].'</h2>
+								<h3 class="poem">by '.$row['author'].'</h3>
+								<pre class="poem">'.nl2br($row['text']).'</pre>
 							</div>
 						';
 					}
