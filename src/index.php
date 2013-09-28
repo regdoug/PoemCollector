@@ -40,7 +40,16 @@
 	<body>
 		<div class="main">
 			<h1>Honors Pizza Poem Submission</h1>
-			<?php /* <a href="?action=view">View submissions</a><br /> */ ?>
+			<div id="navbar">
+				<ul>
+			
+					<li><a href="?action=create">Submit Poems</a></li>
+				
+					<li><a href="?action=view">View Poems</a></li>
+				
+				</ul>
+			</div>
+			<br class="clear" />
 			<div class="editor">
 			<?php
 				// Check what our current action is a display the relevent page.
