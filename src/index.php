@@ -49,7 +49,7 @@
 				
 				</ul>
 			</div>
-			<br class="clear" />
+			<br class="clearfix" />
 			<div class="editor">
 			<?php
 				// Check what our current action is a display the relevent page.
@@ -216,12 +216,12 @@
 					{
 						echo '
 							<div class="poem">
-								<h2 class="poem">'.$row['title'].'</h2>
-								<h3 class="poem">by '.$row['author'].'</h3>
+								<h2>'.$row['title'].'</h2>
+								<h3>by '.$row['author'].'</h3>
 								<hr />
-								<pre class="poem">'.nl2br($row['text']).'</pre>
+								<pre>'.nl2br($row['text']).'</pre>
 								<hr />
-								<span class="poem">Votes: '.$row['votes'].'<br /><a href="?action=vote&id='.$row['id'].'">Cast vote</a></span>
+								<span class="votes">'.$row['votes'].'<br /><a class="aside" href="?action=vote&id='.$row['id'].'">Vote for me!</a></span>
 							</div>
 						';
 					}
