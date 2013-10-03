@@ -219,7 +219,7 @@
 								<h2>'.$row['title'].'</h2>
 								<h3>by '.$row['author'].'</h3>
 								<hr />
-								<pre>'.nl2br($row['text']).'</pre>
+								<pre>'.$row['text'].'</pre>
 								<hr />
 								<span class="votes">'.$row['votes'].'<br /><a class="aside" href="?action=vote&id='.$row['id'].'">Vote for me!</a></span>
 							</div>
