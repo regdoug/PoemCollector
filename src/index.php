@@ -2,7 +2,7 @@
 	/**
 	* @author Ryan Rule-Hoffman
 	**/
-	$release = 3; // Build number
+	$release = 4; // Build number
 	
 	require_once('recaptchalib.php');
 	$recatpchaPublicKey = "6LewcucSAAAAAJOxCV4h_KDIqc019Zb77C2BEVPp";
@@ -25,7 +25,18 @@
 	require_once('SiteConfigVars.php');
 	function getDatabase()
 	{
-		return new PDO('mysql:host='.getConfigValue('dbHost_w_hon').';dbname=w_hon;charset=utf8', 'w-hon', getConfigValue('dbPass_w_hon'));
+		$pdo = new PDO('mysql:host='.getConfigValue('dbHost_w_hon').';dbname=w_hon;charset=utf8', 'w-hon', getConfigValue('dbPass_w_hon'));
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+		return $pdo;
+	}
+	
+	/**
+	* Print a database error message.
+	* @param e The exception.
+	**/
+	function printDatabaseError($e)
+	{
+		echo "Sorry, there was an error connecting to the database.<br /> Please try again later!<br />";
 	}
 ?>
 <!DOCTYPE HTML>
@@ -49,38 +60,11 @@
 				
 				</ul>
 			</div>
-			<br class="clearfix" />
+			<br class="clear" />
 			<div class="editor">
 			<?php
 				// Check what our current action is a display the relevent page.
-				if ($action == "create")
-				{
-					// Display the poem creation form.
-					?>
-					<form method="post" action="?action=submit">
-						
-						Poem Title<br />
-						<input type="text" name="title" size="35" /><br />
-						
-						Author Name<br />
-						<input type="text" name="author" size="35" /><br />
-						
-						Poem Content:
-						<br />
-					
-						<textarea name="content" rows="5" cols="50"></textarea>
-						<br />
-						
-						<?php
-					        echo recaptcha_get_html($recatpchaPublicKey);
-						?>
-						
-						<input type="submit" />
-						
-					</form>
-					<?php
-				}
-				else if ($action == "submit")
+				if ($action == "submit")
 				{
 					// Grab all of the submitted information.
 					$title = $_REQUEST['title'];
@@ -128,12 +112,16 @@
 					}
 					else
 					{
-						// Submit a poem into the database.
-						$db = getDatabase();
-						$stmt = $db->prepare("INSERT INTO rit_poems(title,author,text) VALUES(:title,:author,:text)");
-						$stmt->execute(array(':title' => $title, ':author' => $author, ':text' => $content));
-						
-						echo "Thank you; your poem has been submitted.<br />";
+						try {
+							// Submit a poem into the database.
+							$db = getDatabase();
+							$stmt = $db->prepare("INSERT INTO rit_poems(title,author,text) VALUES(:title,:author,:text)");
+							$stmt->execute(array(':title' => $title, ':author' => $author, ':text' => $content));
+							
+							echo "Thank you; your poem has been submitted.<br />";
+						} catch (PDOException $e) {
+							printDatabaseError($e);
+						}
 					}
 					echo '
 						<a href="?">Back to form</a>
@@ -186,45 +174,80 @@
 					  		}
 					  		else
 					  		{
-					  			// Grab the current amount of votes
-					  			$db = getDatabase();
-								$stmt = $db->prepare("SELECT * FROM rit_poems WHERE id=:id");
-								$stmt->execute(array(':id' => $id));
-								$row = $stmt->fetch(PDO::FETCH_ASSOC);
-								$votes = $row['votes'];
-								
-								// Increment it
-								$votes++;
-								
-								// And save it!
-								$stmt = $db->prepare("UPDATE rit_poems SET votes=:votes WHERE id=:id");
-								$stmt->execute(array(':id' => $id, ':votes' => $votes));
-								
-					  			echo 'Thank you for voting.<br />';
-					  			$action = "view";
+					  			try {
+						  			// Grab the current amount of votes
+						  			$db = getDatabase();
+									$stmt = $db->prepare("SELECT * FROM rit_poems WHERE id=:id");
+									$stmt->execute(array(':id' => $id));
+									$row = $stmt->fetch(PDO::FETCH_ASSOC);
+									$votes = $row['votes'];
+									
+									// Increment it
+									$votes++;
+									
+									// And save it!
+									$stmt = $db->prepare("UPDATE rit_poems SET votes=:votes WHERE id=:id");
+									$stmt->execute(array(':id' => $id, ':votes' => $votes));
+									
+						  			echo 'Thank you for voting.<br />';
+						  			$action = "view";
+					  			} catch (PDOException $e) { 
+									printDatabaseError($e);
+								}
 					  		}
 						}
 					}
 				}
 				if ($action == "view")
 				{
-					$db = getDatabase();
-					$stmt = $db->prepare("SELECT * FROM rit_poems");
-					$stmt->execute();
-					$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-					foreach($rows as $row)
-					{
-						echo '
-							<div class="poem">
-								<h2>'.$row['title'].'</h2>
-								<h3>by '.$row['author'].'</h3>
-								<hr />
-								<pre>'.$row['text'].'</pre>
-								<hr />
-								<span class="votes">'.$row['votes'].'<br /><a class="aside" href="?action=vote&id='.$row['id'].'">Vote for me!</a></span>
-							</div>
-						';
+					try {
+						$db = getDatabase();
+						$stmt = $db->prepare("SELECT * FROM rit_poems");
+						$stmt->execute();
+						$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+						foreach($rows as $row)
+						{
+							echo '
+								<div class="poem">
+									<h2 class="poem">'.$row['title'].'</h2>
+									<h3 class="poem">by '.$row['author'].'</h3>
+									<hr />
+									<pre class="poem">'.nl2br($row['text']).'</pre>
+									<hr />
+									<span class="poem">Votes: '.$row['votes'].'<br /><a href="?action=vote&id='.$row['id'].'">Cast vote</a></span>
+								</div>
+							';
+						}
+					} catch (PDOException $e) { 
+						printDatabaseError($e);
 					}
+				}
+				else
+				{
+					// Display the poem creation form.
+					?>
+					<form method="post" action="?action=submit">
+						
+						Poem Title<br />
+						<input type="text" name="title" size="35" /><br />
+						
+						Author Name<br />
+						<input type="text" name="author" size="35" /><br />
+						
+						Poem Content:
+						<br />
+					
+						<textarea name="content" rows="5" cols="50"></textarea>
+						<br />
+						
+						<?php
+					        echo recaptcha_get_html($recatpchaPublicKey);
+						?>
+						
+						<input type="submit" />
+						
+					</form>
+					<?php
 				}
 			?>
 			</div>

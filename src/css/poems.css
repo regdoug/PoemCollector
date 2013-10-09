@@ -55,7 +55,7 @@ h1
 }
 
 /* Styling for the poems */
-.poem
+div.poem
 {
 	border-style: solid;
 	border-width: 3px;
@@ -63,29 +63,19 @@ h1
 	padding: 0px;
 	margin-bottom: 40px;
 }
-.votes
-{
-	float: right;
-	position: relative;
-	top: -7em;
-	left: -100px;
-}
-.bignumber{
-	font-size: 4em;
-}
 
-h2
+h2.poem
 {
 	margin: 10px;
 }
 
-h3
+h3.poem
 {
 	margin: 0 0 20px 0;
     font-size: .8em;
 }
 
-pre
+pre.poem
 {
 	text-align: left;
     margin: 10px;
@@ -94,24 +84,21 @@ pre
 }
 
 /* Styling for the link colors */
-.aside{ font-size: smaller }
 a:link
 {
-	color: #ddd;
+	color: #1FE5FF;
 }
 a:visited
 {
-	color: #ddd;
+	color: #1FE5FF;
 }
 a:hover
 {
-	color: #fff;
-	text-decoration: none;
+	color: #BFF8FF;
 }
 a:active
 {
-	color: #fff;
-	text-decoration: none;
+	color: #1FE5FF;
 }
 
 /* Styling for the navigation bar at the top */
@@ -169,6 +156,6 @@ a:active
 }
 
 /* Our clear line break to clean up those floats! */
-.clearfix {
+br.clear {
 	clear:both;
 }
