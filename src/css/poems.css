@@ -7,7 +7,6 @@ html
 body
 {
 	background: url("../images/background.png");
-	
 	height: 100%;
 	margin: 0;
 	background-repeat: no-repeat;
@@ -22,6 +21,7 @@ div.main
 	text-align: center;
 }
 
+/* Stlying for reCatpcha */
 #recaptcha_area
 {
     margin: 0 auto;
@@ -83,6 +83,38 @@ pre.poem
     font-family: arial;
 }
 
+pre.time
+{
+	font-size: 10px;
+}
+
+pre.actions
+{
+	font-size: 10px;
+	text-align: right;
+}
+
+pre.order
+{
+	font-size: 12px;
+	text-align: left;
+}
+
+/* Styling for authentication */
+div.auth
+{
+	font-size: 12px;
+}
+
+/* Styling for footer */
+div.footer
+{
+	text-align: center;
+	font-size: 12px;
+	color: #000C94;
+	text-shadow: #FFF 0px 0px 9px;
+}
+
 /* Styling for the link colors */
 a:link
 {
@@ -102,14 +134,16 @@ a:active
 }
 
 /* Styling for the navigation bar at the top */
-#navbar {
+#navbar
+{
 	float:left;
 	width:100%;
 	overflow:hidden;
 	position:relative;
 }
 
-#navbar ul {
+#navbar ul
+{
 	clear:left;
 	float:left;
 	list-style:none;
@@ -120,19 +154,22 @@ a:active
 	text-align:center;
 }
 
-#navbar ul li a:hover {
+#navbar ul li a:hover
+{
 	background:#369;
 	color:#fff;
 }
 
 #navbar ul li a.active,
-#navbar ul li a.active:hover {
+#navbar ul li a.active:hover
+{
 	color:#fff;
 	background:#000;
 	font-weight:bold;
 }
 
-#navbar ul li {
+#navbar ul li
+{
 	display:block;
 	float:left;
 	list-style:none;
@@ -142,7 +179,8 @@ a:active
 	right:50%;
 }
 
-#navbar ul li a {
+#navbar ul li a
+{
 	display:block;
 	margin:0 0 0 1px;
 	padding:3px 10px;
@@ -156,6 +194,7 @@ a:active
 }
 
 /* Our clear line break to clean up those floats! */
-br.clear {
+br.clear
+{
 	clear:both;
 }
