@@ -69,17 +69,16 @@
 	function hasPermission($permission)
 	{
 		// TODO: Some kind of authentication.
-		return $_SESSION['loggedIn'];
+		return $loggedIn;
 	}
 	
-	// Parse any actions that need to be handled before page output.
-	if ($action == "login")
-	{
-		$_SESSION['loggedIn'] = 1;
-	}
-	else if ($action == "logout")
-	{
-		$_SESSION['loggedIn'] = 0;
+	// Initialize authentication
+	if(file_exists('uselogin') && file_exists('../includes/page_start.inc.php')){
+		require_once('../includes/page_start.inc.php');
+		require_once('../includes/scripts/check_login.php');
+		$loggedIn = $v_logged_in;
+	}else{
+		$loggedIn = false;
 	}
 	
 ?>
